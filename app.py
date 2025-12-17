@@ -33,6 +33,13 @@ body {
 [data-testid="stAppViewContainer"] {
     background-color: #c2185b;  /* Pink tua untuk konten utama */
 }
+.member-box {
+    border: 2px solid #ff69b4;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #ffe4e1;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -46,11 +53,21 @@ if "language" not in st.session_state:
     st.session_state.language = "EN"
 
 # --------------------------------------------------
-# Language Dictionary (Tambah deskripsi singkat)
+# Language Dictionary (Updated for Home page and consistency)
 # --------------------------------------------------
 LANG = {
     "EN": {
         "title": "Survey Data Analysis App",
+        "home_title": "🏠 Home",
+        "home_welcome": "Welcome to Survey Data Analysis App! This app allows you to analyze survey data with descriptive statistics, frequency tables, visualizations, and correlation analysis. Let's dive into the world of data insights! ✨",
+        "features": "🌟 Features",
+        "desc_stats_feat": "Descriptive Statistics: Calculate means, medians, and more for your data.",
+        "freq_table_feat": "Frequency Tables: View frequency and percentage distributions.",
+        "viz_feat": "Visualizations: Generate histograms and boxplots.",
+        "corr_feat": "Correlation Analysis: Explore relationships between variables.",
+        "multi_lang": "Multi-language Support: Switch between English and Indonesian.",
+        "about_us": "👥 About Us",
+        "about_desc": "Developed by Group 4, Class 2. 🌟 Explore the power of statistical analysis in survey data! Ready to analyze your data? 🎉",
         "subtitle": "Upload your survey dataset and generate comprehensive statistical insights.",
         "description": "This app allows you to analyze survey data with descriptive statistics, frequency tables, visualizations, and correlation analysis. Perfect for researchers and students exploring various trends and insights.",
         "upload": "Upload your survey dataset (Excel or CSV)",
@@ -70,7 +87,7 @@ LANG = {
         "max": "Maximum",
         "composite": "Composite Score",
         "no_numeric": "No numeric variables found in the dataset.",
-        "member_title": "Team Members",
+        "member_title": "Our Members",
         "select_corr": "Select correlation method",
         "corr_coeff": "Correlation Coefficient (r)",
         "p_value": "p-value",
@@ -87,6 +104,16 @@ LANG = {
     },
     "ID": {
         "title": "Aplikasi Analisis Data Survei",
+        "home_title": "🏠 Beranda",
+        "home_welcome": "Selamat datang di Aplikasi Analisis Data Survei! Aplikasi ini memungkinkan Anda menganalisis data survei dengan statistik deskriptif, tabel frekuensi, visualisasi, dan analisis korelasi. Mari menyelami dunia wawasan data! ✨",
+        "features": "🌟 Fitur",
+        "desc_stats_feat": "Statistik Deskriptif: Hitung rata-rata, median, dan lainnya untuk data Anda.",
+        "freq_table_feat": "Tabel Frekuensi: Lihat distribusi frekuensi dan persentase.",
+        "viz_feat": "Visualisasi: Buat histogram dan boxplot.",
+        "corr_feat": "Analisis Korelasi: Jelajahi hubungan antar variabel.",
+        "multi_lang": "Dukungan Multi-bahasa: Beralih antara Bahasa Inggris dan Indonesia.",
+        "about_us": "👥 Tentang Kami",
+        "about_desc": "Dikembangkan oleh Grup 4, Kelas 2. 🌟 Jelajahi kekuatan analisis statistik dalam data survei! Siap untuk menganalisis data Anda? 🎉",
         "subtitle": "Unggah data survei dan hasilkan analisis statistik yang komprehensif.",
         "description": "Aplikasi ini memungkinkan Anda menganalisis data survei dengan statistik deskriptif, tabel frekuensi, visualisasi, dan analisis korelasi. Cocok untuk peneliti dan mahasiswa yang mengeksplorasi berbagai tren dan wawasan.",
         "upload": "Unggah dataset survei (Excel atau CSV)",
@@ -106,7 +133,7 @@ LANG = {
         "max": "Maksimum",
         "composite": "Skor Komposit",
         "no_numeric": "Tidak ditemukan variabel numerik.",
-        "member_title": "Anggota Tim",
+        "member_title": "Anggota Kami",
         "select_corr": "Pilih metode korelasi",
         "corr_coeff": "Koefisien Korelasi (r)",
         "p_value": "p-value",
@@ -127,10 +154,10 @@ LANG = {
 # Sidebar
 # --------------------------------------------------
 with st.sidebar:
-    page = st.radio("Menu", ["App", "Member"], label_visibility="collapsed")
+    page = st.radio("Menu", ["Home", "App", "Developer Team"], label_visibility="collapsed")
     st.divider()
     st.session_state.language = st.selectbox(
-        "Language / Bahasa",
+        f"Language/Bahasa",
         ["EN", "ID"],
         index=0 if st.session_state.language == "EN" else 1
     )
@@ -138,17 +165,35 @@ with st.sidebar:
 lang = st.session_state.language
 
 # --------------------------------------------------
-# Header
+# Header (Only for App page)
 # --------------------------------------------------
-st.title(LANG[lang]["title"])
-st.caption(LANG[lang]["subtitle"])
-st.write(LANG[lang]["description"])  # Tambah deskripsi singkat di bawah subtitle
-st.markdown("---")
+if page == "App":
+    st.title(LANG[lang]["title"])
+    st.caption(LANG[lang]["subtitle"])
+    st.write(LANG[lang]["description"])
+    st.markdown("---")
+
+# ==================================================
+# PAGE: HOME
+# ==================================================
+if page == "Home":
+    st.markdown(f"# {LANG[lang]['home_title']}")
+    st.write(LANG[lang]["home_welcome"])
+    st.markdown("---")
+    st.markdown(f"## {LANG[lang]['features']}")
+    st.markdown(f"- {LANG[lang]['desc_stats_feat']}")
+    st.markdown(f"- {LANG[lang]['freq_table_feat']}")
+    st.markdown(f"- {LANG[lang]['viz_feat']}")
+    st.markdown(f"- {LANG[lang]['corr_feat']}")
+    st.markdown(f"- {LANG[lang]['multi_lang']}")
+    st.markdown("---")
+    st.markdown(f"## {LANG[lang]['about_us']}")
+    st.write(LANG[lang]["about_desc"])
 
 # ==================================================
 # PAGE: APP
 # ==================================================
-if page == "App":
+elif page == "App":
 
     uploaded_file = st.file_uploader(
         LANG[lang]["upload"],
@@ -322,10 +367,10 @@ if page == "App":
             st.write(LANG[lang]["corr_interpret_id"].format(method=method, strength=strength.lower(), direction=direction.lower(), r=corr_value, p=p_value))
 
 # ==================================================
-# PAGE: MEMBER
+# PAGE: DEVELOPER TEAM (Renamed from Member)
 # ==================================================
 else:
-    st.subheader(LANG[lang]["member_title"])
+    st.markdown(f"# {LANG[lang]['member_title']}")
     st.markdown("---")
 
     col1, col2 = st.columns(2)
@@ -333,6 +378,7 @@ else:
     with col1:
         st.image("assets/fazayya.jpg", width=200)
         st.markdown("### **Fazayya Syauqii Wardhani**")
+        st.markdown("**(004202400072)**")
         if lang == "EN":
             st.markdown("**Role:** Project Leader & Data Analyst")
             st.markdown(
@@ -346,13 +392,14 @@ else:
             st.markdown(
                 "**Tugas:**\n"
                 "- Mengkoordinasikan alur kerja tim\n"
-                "- Menyusun struktur analisis statistik\n"
+                "- Menyusun struktur analisis statisttik\n"
                 "- Menginterpretasikan hasil dan kesimpulan"
             )
 
     with col2:
         st.image("assets/lulu.jpg", width=200)
         st.markdown("### **Lulu Zenover**")
+        st.markdown("**(004202400081)**")
         if lang == "EN":
             st.markdown("**Role:** Data Collection & Instrument Design")
             st.markdown(
@@ -377,6 +424,7 @@ else:
     with col3:
         st.image("assets/nazwa.jpg", width=200)
         st.markdown("### **Nazwa Safa Davina**")
+        st.markdown("**(004202400074)**")
         if lang == "EN":
             st.markdown("**Role:** Statistical Analysis Support")
             st.markdown(
@@ -397,6 +445,7 @@ else:
     with col4:
         st.image("assets/raisyah.jpg", width=200)
         st.markdown("### **Raisyah Aditya Sufah**")
+        st.markdown("**(004202400082)**")
         if lang == "EN":
             st.markdown("**Role:** Application Developer & UI Support")
             st.markdown(
